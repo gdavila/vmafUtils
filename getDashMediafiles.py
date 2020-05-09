@@ -1,4 +1,4 @@
-import json, os, wget, urllib, ssl, re, argparse
+import json, os, wget, urllib, ssl, re, argparse, shutil
 from pathlib import Path
 from subprocess import Popen, PIPE
 
@@ -138,3 +138,6 @@ if __name__ == '__main__':
         print (' '.join(catCmd))
         process.wait()
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
+        
+    print ("Cleaning")
+    shutil.rmtree(tempFolder)
