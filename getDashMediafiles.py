@@ -65,6 +65,8 @@ def mediaFileExists(filePath):
     if Path(filePath).is_file(): return True
     else: return False
 
+def cleanFile(f):
+    return f.split("?")[0] 
 
 def get_args():
     '''This function parses and return arguments passed in'''
@@ -124,13 +126,16 @@ if __name__ == '__main__':
         downloadIniFile(mediaFilesByRepresentation[repId]['iniSeg'], tempFolder )
         downloadMediaFiles(mediaFilesByRepresentation[repId]['mediaSeg'], tempFolder )
         initFile = getFileNameFromUrl(mediaFilesByRepresentation[repId]['iniSeg'])
+        initFile = cleanFile(initFile)
         mediaFiles=[]
         for i in mediaFilesByRepresentation[repId]['mediaSeg']:
             temMediaFile = getFileNameFromUrl(i)
+            temMediaFile = cleanFile(temMediaFile)
             if Path(os.path.join(tempFolder, temMediaFile)).is_file():
                 mediaFiles.append(temMediaFile)
             else: pass
         print("Creating  %s media file..." % repId)
+        print(mediaFiles)
         catCmd = ['cat'] + [initFile] + mediaFiles + ['>'] + ["\""+serviceFolder +"/"+repId + "." + mimeType[mimeType.rfind("/")+1:] + "\""]
         os.chdir(tempFolder)
         process = Popen(' '.join(catCmd), shell=True, stdout=PIPE)
